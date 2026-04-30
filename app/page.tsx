@@ -1,0 +1,11 @@
+import { supabase } from "@/lib/supabase";
+import HomeShell from "./components/homeshell";
+
+export default async function Home() {
+  const { data: products } = await supabase
+    .from("products")
+    .select("*")
+    .order("id", { ascending: false });
+
+  return <HomeShell products={products || []} />;
+}
