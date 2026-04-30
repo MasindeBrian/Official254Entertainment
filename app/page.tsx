@@ -1,3 +1,5 @@
+export const dynamic = "force-dynamic";
+
 import { supabase } from "@/lib/supabase";
 import HomeShell from "./components/homeshell";
 
@@ -7,5 +9,9 @@ export default async function Home() {
     .select("*")
     .order("id", { ascending: false });
 
-  return <HomeShell products={products || []} />;
+  return (
+    <HomeShell
+      products={products || []}
+    />
+  );
 }
