@@ -16,23 +16,33 @@ export default function HomePage() {
           </h1>
 
           <nav className="hidden md:flex gap-8 text-sm font-semibold">
-            <a href="/">Home</a>
-            <a href="/shop">Shop</a>
-            <a href="/contact">Contact</a>
+            <a href="/home" className="hover:text-gray-500 transition">
+              Home
+            </a>
+
+            <a href="/shop" className="hover:text-gray-500 transition">
+              Shop
+            </a>
+
+            <a href="/contact" className="hover:text-gray-500 transition">
+              Contact
+            </a>
           </nav>
 
           <a
             href="/cart"
-            className="text-2xl"
+            className="text-2xl hover:scale-110 transition"
           >
             🛒
           </a>
         </div>
       </header>
 
-      {/* Hero Only */}
-      <section className="max-w-7xl mx-auto px-6 pt-14 pb-20 grid md:grid-cols-2 gap-12 items-center min-h-[85vh]">
-        <div>
+      {/* Hero */}
+      <section className="max-w-7xl mx-auto px-6 pt-14 pb-20 grid md:grid-cols-2 gap-8 items-center min-h-[85vh]">
+        
+        {/* Text Card */}
+        <div className="bg-white rounded-[2rem] p-8 md:p-12 shadow-sm hover:shadow-2xl hover:-translate-y-2 hover:scale-[1.01] transition-all duration-300">
           <p className="tracking-[0.35em] text-xs text-gray-500 mb-4">
             BORN IN 254
           </p>
@@ -48,15 +58,16 @@ export default function HomePage() {
           <div className="mt-8">
             <a
               href="/shop"
-              className="px-7 py-3 rounded-full bg-black text-white font-semibold"
+              className="px-7 py-3 rounded-full bg-black text-white font-semibold hover:scale-[1.03] transition-all"
             >
               Shop Now
             </a>
           </div>
         </div>
 
+        {/* Logo Card */}
         <div className="flex justify-center">
-          <div className="bg-white rounded-[2rem] p-8 shadow-sm border w-full max-w-sm">
+          <div className="bg-white rounded-[2rem] p-8 shadow-sm w-full max-w-sm hover:shadow-2xl hover:-translate-y-2 hover:scale-[1.02] transition-all duration-300">
             <img
               src="/logo.png"
               alt="254Entertainment"
@@ -65,33 +76,6 @@ export default function HomePage() {
           </div>
         </div>
       </section>
-
-      {/* Mobile Bottom Nav */}
-      <nav className="md:hidden fixed bottom-4 left-4 right-4 bg-white border shadow-lg rounded-2xl grid grid-cols-4 py-3 text-center text-xs z-50">
-        <a href="/">
-          🏠
-          <br />
-          Home
-        </a>
-
-        <a href="/shop">
-          🛍️
-          <br />
-          Shop
-        </a>
-
-        <a href="/cart">
-          🛒
-          <br />
-          Cart
-        </a>
-
-        <a href="/contact">
-          📞
-          <br />
-          Contact
-        </a>
-      </nav>
     </main>
   );
 }

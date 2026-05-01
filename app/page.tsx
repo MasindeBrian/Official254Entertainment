@@ -1,16 +1,17 @@
 export default function LandingPage() {
   return (
-    <main className="min-h-screen bg-[#f8f8f8] flex items-center justify-center px-6">
-      <div className="max-w-xl w-full bg-white border rounded-3xl p-8 text-center shadow-sm">
-        <p className="tracking-[0.35em] text-xs text-gray-400 mb-4">
+    <main className="min-h-screen bg-[#f8f8f8] flex items-center justify-center px-5 py-10">
+      <div className="max-w-md w-full bg-white rounded-[2rem] p-8 text-center shadow-sm">
+        <p className="tracking-[0.35em] text-[11px] text-gray-400 mb-4">
           BORN IN 254
         </p>
 
-        <h1 className="text-5xl font-black mb-4">
-          254 ENTERTAINMENT
+        <h1 className="text-4xl md:text-6xl font-black leading-tight mb-4 break-words">
+          254 <br />
+          ENTERTAINMENT
         </h1>
 
-        <p className="text-gray-500 mb-8">
+        <p className="text-gray-500 text-lg mb-8 leading-relaxed">
           Premium streetwear built from culture and confidence.
         </p>
 
@@ -24,7 +25,7 @@ export default function LandingPage() {
 
           <a
             href="/signup"
-            className="border py-4 rounded-full font-semibold"
+            className="bg-[#f3f3f3] py-4 rounded-full font-semibold"
           >
             Create Account
           </a>

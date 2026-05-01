@@ -53,7 +53,7 @@ export default function HomeShell({
   }
 
   const navLinks = [
-    { name: "Home", href: "/" },
+    { name: "Home", href: "/home" },
     { name: "Shop", href: "/shop" },
     { name: "Contact", href: "/contact" },
   ];
@@ -80,7 +80,7 @@ export default function HomeShell({
           </button>
 
           <a
-            href="/"
+            href="/home"
             className="text-lg md:text-3xl font-black"
           >
             254{" "}
@@ -94,28 +94,27 @@ export default function HomeShell({
               <a
                 key={link.name}
                 href={link.href}
+                className="hover:text-gray-500 transition"
               >
                 {link.name}
               </a>
             ))}
           </nav>
 
-          {/* Cart Button */}
-         {/* Cart Icon */}
-<button
-  onClick={() =>
-    setCartOpen(true)
-  }
-  className="relative text-2xl"
->
-  🛒
+          <button
+            onClick={() =>
+              setCartOpen(true)
+            }
+            className="relative text-2xl hover:scale-110 transition"
+          >
+            🛒
 
-  {cartCount > 0 && (
-    <span className="absolute -top-2 -right-2 bg-black text-white text-[10px] w-5 h-5 rounded-full flex items-center justify-center">
-      {cartCount}
-    </span>
-  )}
-</button>
+            {cartCount > 0 && (
+              <span className="absolute -top-2 -right-2 bg-black text-white text-[10px] w-5 h-5 rounded-full flex items-center justify-center">
+                {cartCount}
+              </span>
+            )}
+          </button>
         </div>
       </header>
 
@@ -201,7 +200,7 @@ export default function HomeShell({
                 cart.map((item: any) => (
                   <div
                     key={item.id}
-                    className="border rounded-2xl p-4"
+                    className="rounded-2xl bg-[#fafafa] p-4"
                   >
                     <h3 className="font-bold">
                       {item.name}
@@ -216,7 +215,7 @@ export default function HomeShell({
                         onClick={() =>
                           decreaseQty(item.id)
                         }
-                        className="w-8 h-8 border rounded-full"
+                        className="w-8 h-8 bg-white rounded-full"
                       >
                         -
                       </button>
@@ -229,7 +228,7 @@ export default function HomeShell({
                         onClick={() =>
                           increaseQty(item.id)
                         }
-                        className="w-8 h-8 border rounded-full"
+                        className="w-8 h-8 bg-white rounded-full"
                       >
                         +
                       </button>
@@ -258,7 +257,7 @@ export default function HomeShell({
 
               <a
                 href="/checkout"
-                className="block w-full bg-black text-white py-4 rounded-full text-center font-semibold"
+                className="block w-full bg-black text-white py-4 rounded-full text-center font-semibold hover:opacity-95 transition"
               >
                 Checkout
               </a>
@@ -268,8 +267,8 @@ export default function HomeShell({
       )}
 
       {/* Hero */}
-      <section className="max-w-7xl mx-auto px-6 py-16 md:py-24 grid md:grid-cols-2 gap-12 items-center">
-        <div>
+      <section className="max-w-7xl mx-auto px-6 py-16 md:py-24 grid md:grid-cols-2 gap-8 items-center">
+        <div className="bg-white rounded-[2rem] p-8 md:p-12 shadow-sm hover:shadow-2xl hover:-translate-y-2 hover:scale-[1.01] transition-all duration-300">
           <p className="tracking-[0.35em] text-xs text-gray-500 mb-4">
             BORN IN 254
           </p>
@@ -288,7 +287,7 @@ export default function HomeShell({
           <div className="mt-8">
             <a
               href="/shop"
-              className="px-7 py-3 bg-black text-white rounded-full font-semibold"
+              className="px-7 py-3 bg-black text-white rounded-full font-semibold hover:scale-[1.03] transition-all"
             >
               Shop Now
             </a>
@@ -296,7 +295,7 @@ export default function HomeShell({
         </div>
 
         <div className="flex justify-center">
-          <div className="bg-white rounded-[2rem] p-8 border shadow-sm w-full max-w-sm">
+          <div className="bg-white rounded-[2rem] p-8 shadow-sm w-full max-w-sm hover:shadow-2xl hover:-translate-y-2 hover:scale-[1.02] transition-all duration-300">
             <img
               src="/logo.png"
               alt="254Entertainment"
@@ -306,7 +305,6 @@ export default function HomeShell({
         </div>
       </section>
 
-      {/* Store */}
       <StoreFront
         products={products}
         selectedCategory={
@@ -314,7 +312,6 @@ export default function HomeShell({
         }
       />
 
-      {/* Footer */}
       <footer className="bg-black text-white text-center py-10 mt-12">
         © 2026 254 ENTERTAINMENT
       </footer>
