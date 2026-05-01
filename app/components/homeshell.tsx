@@ -12,10 +12,18 @@ export default function HomeShell({
   const [selectedCategory, setSelectedCategory] =
     useState("All");
 
-  const [sidebar, setSidebar] =
+  const [menuOpen, setMenuOpen] =
     useState(false);
 
-  const { cart } = useCart();
+  const [cartOpen, setCartOpen] =
+    useState(false);
+
+  const {
+    cart,
+    increaseQty,
+    decreaseQty,
+    removeFromCart,
+  } = useCart();
 
   const cartCount = cart.reduce(
     (sum: number, item: any) =>
@@ -23,206 +31,293 @@ export default function HomeShell({
     0
   );
 
+  const total = cart.reduce(
+    (sum: number, item: any) => {
+      const price = parseFloat(
+        String(item.price).replace(/[^\d.]/g, "")
+      );
+
+      return (
+        sum +
+        (isNaN(price)
+          ? 0
+          : price * item.quantity)
+      );
+    },
+    0
+  );
+
   function chooseCategory(cat: string) {
     setSelectedCategory(cat);
-    setSidebar(false);
+    setMenuOpen(false);
   }
 
   const navLinks = [
     { name: "Home", href: "/" },
     { name: "Shop", href: "/shop" },
     { name: "Contact", href: "/contact" },
-    {
-      name: `Cart (${cartCount})`,
-      href: "/cart",
-    },
+  ];
+
+  const categories = [
+    "All",
+    "Men",
+    "Women",
+    "Unisex",
   ];
 
   return (
-    <main className="min-h-screen bg-[#f5f5f5] text-black overflow-x-hidden">
-      {/* Desktop Header */}
-      <header className="hidden md:flex sticky top-0 z-50 bg-white/90 backdrop-blur border-b border-gray-200 px-[5%] py-5 items-center justify-between">
-        <a
-          href="/"
-          className="font-black text-2xl tracking-tight"
-        >
-          254Entertainment
-        </a>
+    <main className="min-h-screen bg-[#f8f8f8] text-black pb-20 md:pb-0">
+      {/* Header */}
+      <header className="sticky top-0 z-50 bg-white/90 backdrop-blur border-b">
+        <div className="max-w-7xl mx-auto px-4 md:px-6 py-4 flex items-center justify-between">
+          <button
+            onClick={() =>
+              setMenuOpen(true)
+            }
+            className="md:hidden text-2xl"
+          >
+            ☰
+          </button>
 
-        <nav className="flex items-center gap-8 text-sm font-medium">
-          {navLinks.map((link) => (
-            <a
-              key={link.name}
-              href={link.href}
-              className="hover:opacity-60 transition"
-            >
-              {link.name}
-            </a>
-          ))}
-        </nav>
+          <a
+            href="/"
+            className="text-lg md:text-3xl font-black"
+          >
+            254{" "}
+            <span className="bg-black text-white px-3 py-1 rounded-lg">
+              ENTERTAINMENT
+            </span>
+          </a>
+
+          <nav className="hidden md:flex gap-8 text-sm font-semibold">
+            {navLinks.map((link) => (
+              <a
+                key={link.name}
+                href={link.href}
+              >
+                {link.name}
+              </a>
+            ))}
+          </nav>
+
+          {/* Cart Button */}
+         {/* Cart Icon */}
+<button
+  onClick={() =>
+    setCartOpen(true)
+  }
+  className="relative text-2xl"
+>
+  🛒
+
+  {cartCount > 0 && (
+    <span className="absolute -top-2 -right-2 bg-black text-white text-[10px] w-5 h-5 rounded-full flex items-center justify-center">
+      {cartCount}
+    </span>
+  )}
+</button>
+        </div>
       </header>
 
-      {/* Mobile Header */}
-      <header className="md:hidden sticky top-0 z-50 bg-white/95 backdrop-blur border-b px-4 py-4 flex justify-between items-center">
-        <a
-          href="/"
-          className="font-black text-lg"
-        >
-          254Entertainment
-        </a>
-
-        <button
-          onClick={() =>
-            setSidebar(true)
-          }
-          className="text-2xl"
-        >
-          ☰
-        </button>
-      </header>
-
-      {/* Mobile Sidebar */}
-      {sidebar && (
+      {/* Mobile Menu */}
+      {menuOpen && (
         <div className="fixed inset-0 z-50 bg-black/40">
-          <div className="absolute right-0 top-0 h-full w-72 bg-white p-6 shadow-2xl">
-            <div className="flex justify-between items-center mb-10">
-              <h2 className="text-2xl font-bold">
-                Menu
+          <div className="bg-white w-72 h-full p-6">
+            <div className="flex justify-between mb-8">
+              <h2 className="font-black text-xl">
+                MENU
               </h2>
 
               <button
                 onClick={() =>
-                  setSidebar(false)
+                  setMenuOpen(false)
                 }
-                className="text-2xl"
               >
-                ×
+                ✕
               </button>
             </div>
 
-            <div className="space-y-5 text-lg">
+            <div className="space-y-5 font-semibold">
               {navLinks.map((link) => (
                 <a
                   key={link.name}
                   href={link.href}
-                  onClick={() =>
-                    setSidebar(false)
-                  }
                   className="block"
+                  onClick={() =>
+                    setMenuOpen(false)
+                  }
                 >
                   {link.name}
                 </a>
               ))}
+            </div>
 
-              <div className="pt-6 border-t">
-                <p className="text-sm text-gray-400 mb-3">
-                  Collections
+            <div className="mt-8 pt-6 border-t">
+              <p className="text-sm text-gray-400 mb-3">
+                Categories
+              </p>
+
+              {categories.map((cat) => (
+                <button
+                  key={cat}
+                  onClick={() =>
+                    chooseCategory(cat)
+                  }
+                  className="block py-2 w-full text-left"
+                >
+                  {cat}
+                </button>
+              ))}
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Cart Drawer */}
+      {cartOpen && (
+        <div className="fixed inset-0 z-50 bg-black/40">
+          <div className="absolute right-0 top-0 h-full w-full max-w-md bg-white shadow-2xl flex flex-col">
+            <div className="p-6 border-b flex justify-between items-center">
+              <h2 className="text-2xl font-black">
+                Your Cart
+              </h2>
+
+              <button
+                onClick={() =>
+                  setCartOpen(false)
+                }
+                className="text-2xl"
+              >
+                ✕
+              </button>
+            </div>
+
+            <div className="flex-1 overflow-y-auto p-6 space-y-5">
+              {cart.length === 0 ? (
+                <p className="text-gray-500 text-center mt-10">
+                  Your cart is empty.
                 </p>
-
-                {[
-                  "All",
-                  "Men",
-                  "Women",
-                  "Unisex",
-                ].map((cat) => (
-                  <button
-                    key={cat}
-                    onClick={() =>
-                      chooseCategory(cat)
-                    }
-                    className="block w-full text-left py-2"
+              ) : (
+                cart.map((item: any) => (
+                  <div
+                    key={item.id}
+                    className="border rounded-2xl p-4"
                   >
-                    {cat}
-                  </button>
-                ))}
+                    <h3 className="font-bold">
+                      {item.name}
+                    </h3>
+
+                    <p className="text-gray-500 text-sm">
+                      {item.price}
+                    </p>
+
+                    <div className="flex items-center gap-3 mt-4">
+                      <button
+                        onClick={() =>
+                          decreaseQty(item.id)
+                        }
+                        className="w-8 h-8 border rounded-full"
+                      >
+                        -
+                      </button>
+
+                      <span>
+                        {item.quantity}
+                      </span>
+
+                      <button
+                        onClick={() =>
+                          increaseQty(item.id)
+                        }
+                        className="w-8 h-8 border rounded-full"
+                      >
+                        +
+                      </button>
+
+                      <button
+                        onClick={() =>
+                          removeFromCart(item.id)
+                        }
+                        className="ml-auto text-sm text-red-500"
+                      >
+                        Remove
+                      </button>
+                    </div>
+                  </div>
+                ))
+              )}
+            </div>
+
+            <div className="p-6 border-t">
+              <div className="flex justify-between font-bold text-xl mb-4">
+                <span>Total</span>
+                <span>
+                  KSh {total.toLocaleString()}
+                </span>
               </div>
+
+              <a
+                href="/checkout"
+                className="block w-full bg-black text-white py-4 rounded-full text-center font-semibold"
+              >
+                Checkout
+              </a>
             </div>
           </div>
         </div>
       )}
 
       {/* Hero */}
-      <section className="min-h-[92vh] bg-white grid md:grid-cols-2 gap-10 items-center px-[5%] py-10 md:py-16">
-        <div className="order-2 md:order-1">
-          <p className="text-xs tracking-[0.35em] text-gray-500 mb-4">
+      <section className="max-w-7xl mx-auto px-6 py-16 md:py-24 grid md:grid-cols-2 gap-12 items-center">
+        <div>
+          <p className="tracking-[0.35em] text-xs text-gray-500 mb-4">
             BORN IN 254
           </p>
 
-          <h1 className="text-5xl sm:text-6xl md:text-8xl font-black leading-[0.95]">
+          <h1 className="text-5xl md:text-8xl font-black leading-[0.92]">
             Own The
             <br />
             Street.
           </h1>
 
-          <p className="mt-6 text-gray-500 text-base md:text-lg max-w-xl">
-            Premium drops inspired by
-            culture, confidence and
-            movement.
+          <p className="mt-6 text-lg text-gray-500">
+            Premium drops inspired by culture,
+            confidence and movement.
           </p>
 
-          <div className="flex flex-col sm:flex-row gap-4 mt-8">
+          <div className="mt-8">
             <a
               href="/shop"
-              className="px-7 py-4 rounded-full bg-black text-white font-semibold text-center hover:-translate-y-1 transition"
+              className="px-7 py-3 bg-black text-white rounded-full font-semibold"
             >
               Shop Now
-            </a>
-
-            <a
-              href="/cart"
-              className="px-7 py-4 rounded-full border border-gray-300 font-semibold text-center hover:-translate-y-1 transition"
-            >
-              View Cart
             </a>
           </div>
         </div>
 
-        <div className="order-1 md:order-2 flex justify-center">
-          <img
-            src="/logo.png"
-            alt="254Entertainment"
-            className="w-full max-w-[420px] rounded-[28px] bg-white p-4 shadow-2xl"
-          />
+        <div className="flex justify-center">
+          <div className="bg-white rounded-[2rem] p-8 border shadow-sm w-full max-w-sm">
+            <img
+              src="/logo.png"
+              alt="254Entertainment"
+              className="w-full"
+            />
+          </div>
         </div>
       </section>
 
-      {/* Store Section */}
-      <section className="py-16">
-        <StoreFront
-          products={products}
-          selectedCategory={
-            selectedCategory
-          }
-        />
-      </section>
-
-      {/* Banner */}
-      <section className="bg-black text-white text-center px-[5%] py-20">
-        <h2 className="text-4xl md:text-6xl font-black">
-          254 EXCLUSIVE
-        </h2>
-
-        <p className="text-gray-400 mt-4 text-lg">
-          Limited pieces. Real culture.
-        </p>
-      </section>
+      {/* Store */}
+      <StoreFront
+        products={products}
+        selectedCategory={
+          selectedCategory
+        }
+      />
 
       {/* Footer */}
-      <footer className="bg-white border-t text-center text-gray-500 px-[5%] py-10">
-        © 2026 254Entertainment
+      <footer className="bg-black text-white text-center py-10 mt-12">
+        © 2026 254 ENTERTAINMENT
       </footer>
-
-      {/* Mobile Bottom Nav */}
-      <nav className="md:hidden fixed bottom-0 left-0 right-0 bg-white border-t grid grid-cols-4 text-center text-xs font-bold py-3 z-40">
-        <a href="/">Home</a>
-        <a href="/shop">Shop</a>
-        <a href="/cart">
-          Cart
-        </a>
-        <a href="/contact">
-          Contact
-        </a>
-      </nav>
     </main>
   );
 }

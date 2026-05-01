@@ -39,7 +39,8 @@ export default function StoreFront({
         const matchCategory =
           category === "All"
             ? true
-            : item.category.toLowerCase() ===
+            : item.category
+                .toLowerCase() ===
               category.toLowerCase();
 
         return (
@@ -63,20 +64,7 @@ export default function StoreFront({
 
     setTimeout(() => {
       setAlert("");
-    }, 2000);
-  }
-
-  function whatsappLink(
-    item: any
-  ) {
-    const msg =
-      `Hello, I want to order ${item.name}.\n` +
-      `Price: ${item.price}\n` +
-      `Category: ${item.category}`;
-
-    return `https://wa.me/254757900428?text=${encodeURIComponent(
-      msg
-    )}`;
+    }, 1800);
   }
 
   const categories = [
@@ -87,32 +75,30 @@ export default function StoreFront({
   ];
 
   return (
-    <section className="bg-white">
+    <section className="bg-[#f8f8f8]">
       {/* Alert */}
       {alert && (
-        <div className="sticky top-24 z-40 px-4">
-          <div className="max-w-md mx-auto mt-4 bg-black text-white px-6 py-3 rounded-full text-center shadow-xl">
+        <div className="fixed top-24 left-1/2 -translate-x-1/2 z-50">
+          <div className="bg-black text-white px-6 py-3 rounded-full shadow-xl text-sm font-semibold">
             {alert}
           </div>
         </div>
       )}
 
       {/* Header */}
-      <div className="max-w-7xl mx-auto px-4 md:px-8 pt-10 pb-8">
-        <p className="tracking-[0.35em] text-xs text-gray-400 mb-3">
-          COLLECTIONS
-        </p>
-
+      <div className="max-w-7xl mx-auto px-4 md:px-8 pt-8 pb-8">
         <div className="flex flex-col md:flex-row md:items-end md:justify-between gap-6">
           <div>
+            <p className="tracking-[0.35em] text-xs text-gray-400 mb-3">
+              COLLECTIONS
+            </p>
+
             <h2 className="text-4xl md:text-6xl font-black leading-none">
-              Shop The Drop
+              Shop All
             </h2>
 
-            <p className="text-gray-500 mt-3 max-w-xl">
-              Premium essentials built
-              for movement, culture and
-              identity.
+            <p className="text-gray-500 mt-3">
+              Curated premium pieces for culture and movement.
             </p>
           </div>
 
@@ -124,8 +110,8 @@ export default function StoreFront({
 
       {/* Controls */}
       <div className="max-w-7xl mx-auto px-4 md:px-8 pb-10">
-        <div className="bg-[#f7f7f7] rounded-3xl p-4 md:p-6 border">
-          <div className="grid md:grid-cols-2 gap-4 items-center">
+        <div className="bg-white border rounded-3xl p-5 shadow-sm">
+          <div className="grid md:grid-cols-2 gap-4">
             <input
               value={search}
               onChange={(e) =>
@@ -133,8 +119,8 @@ export default function StoreFront({
                   e.target.value
                 )
               }
-              placeholder="Search tees, hoodies, caps..."
-              className="w-full bg-white border rounded-full px-6 py-4 outline-none"
+              placeholder="Search products..."
+              className="w-full rounded-full border px-6 py-4 outline-none bg-[#fafafa]"
             />
 
             <div className="flex flex-wrap gap-2 md:justify-end">
@@ -143,14 +129,12 @@ export default function StoreFront({
                   <button
                     key={cat}
                     onClick={() =>
-                      setCategory(
-                        cat
-                      )
+                      setCategory(cat)
                     }
-                    className={`px-5 py-3 rounded-full text-sm transition ${
+                    className={`px-5 py-3 rounded-full text-sm font-semibold transition ${
                       category === cat
                         ? "bg-black text-white"
-                        : "bg-white border"
+                        : "bg-[#fafafa] border"
                     }`}
                   >
                     {cat}
@@ -163,87 +147,74 @@ export default function StoreFront({
       </div>
 
       {/* Products */}
-      <div className="max-w-7xl mx-auto px-4 md:px-8 pb-20">
+      <div className="max-w-7xl mx-auto px-4 md:px-8 pb-24">
         {filtered.length === 0 ? (
-          <div className="bg-[#f7f7f7] rounded-3xl p-12 text-center border">
-            <h3 className="text-2xl font-bold mb-2">
+          <div className="bg-white rounded-3xl border p-12 text-center">
+            <h3 className="text-2xl font-bold">
               No products found
             </h3>
 
-            <p className="text-gray-500">
-              Try another search or
-              category.
+            <p className="text-gray-500 mt-2">
+              Try another search.
             </p>
           </div>
         ) : (
-          <div className="grid sm:grid-cols-2 xl:grid-cols-3 gap-6">
+          <div className="grid sm:grid-cols-2 xl:grid-cols-4 gap-6">
             {filtered.map(
-              (item) => (
+              (item, i) => (
                 <div
                   key={item.id}
-                  className="group bg-[#fafafa] border rounded-3xl overflow-hidden hover:shadow-xl transition"
+                  className="bg-white rounded-3xl border overflow-hidden hover:shadow-2xl hover:-translate-y-1 transition duration-300 group"
                 >
                   {/* Image */}
                   {item.image_url ? (
-                    <div className="overflow-hidden">
+                    <div className="relative overflow-hidden bg-[#f5f5f5]">
+                      <span className="absolute top-4 left-4 z-10 bg-black text-white text-[10px] px-3 py-1 rounded-full tracking-wide">
+                        {i % 3 === 0
+                          ? "NEW"
+                          : i % 3 === 1
+                          ? "HOT"
+                          : "LIMITED"}
+                      </span>
+
                       <img
-                        src={
-                          item.image_url
-                        }
-                        alt={
-                          item.name
-                        }
+                        src={item.image_url}
+                        alt={item.name}
                         className="w-full h-72 object-cover group-hover:scale-105 transition duration-500"
                       />
                     </div>
                   ) : (
-                    <div className="w-full h-72 bg-gray-100"></div>
+                    <div className="h-72 bg-[#f3f3f3]" />
                   )}
 
-                  {/* Info */}
-                  <div className="p-6">
-                    <div className="flex justify-between gap-4 mb-2">
-                      <h4 className="font-bold text-xl leading-tight">
-                        {
-                          item.name
-                        }
-                      </h4>
+                  {/* Content */}
+                  <div className="p-5">
+                    <h4 className="font-black text-lg leading-tight mb-2">
+                      {item.name}
+                    </h4>
 
-                      <span className="font-semibold">
-                        {
-                          item.price
-                        }
+                    <p className="text-sm text-gray-400 uppercase tracking-[0.25em] mb-3">
+                      {item.category}
+                    </p>
+
+                    <div className="flex justify-between items-center mb-5">
+                      <span className="text-xl font-black">
+                        {item.price}
+                      </span>
+
+                      <span className="text-xs text-gray-400">
+                        Premium
                       </span>
                     </div>
 
-                    <p className="text-sm text-gray-400 mb-6 uppercase tracking-wide">
-                      {
-                        item.category
+                    <button
+                      onClick={() =>
+                        handleAdd(item)
                       }
-                    </p>
-
-                    <div className="grid gap-3">
-                      <button
-                        onClick={() =>
-                          handleAdd(
-                            item
-                          )
-                        }
-                        className="w-full bg-black text-white py-3 rounded-full font-medium"
-                      >
-                        Add to Cart
-                      </button>
-
-                      <a
-                        href={whatsappLink(
-                          item
-                        )}
-                        target="_blank"
-                        className="w-full text-center border py-3 rounded-full font-medium"
-                      >
-                        Order via WhatsApp
-                      </a>
-                    </div>
+                      className="w-full bg-black text-white py-3 rounded-full font-semibold"
+                    >
+                      Add to Cart
+                    </button>
                   </div>
                 </div>
               )
