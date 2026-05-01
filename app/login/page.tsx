@@ -32,6 +32,15 @@ export default function LoginPage() {
       return;
     }
 
+    /* allow cookie/session to settle */
+    await new Promise(
+      (resolve) =>
+        setTimeout(
+          resolve,
+          1000
+        )
+    );
+
     const userId =
       data.user.id;
 
@@ -50,10 +59,8 @@ export default function LoginPage() {
         "/dashboard";
     } else {
       window.location.href =
-        "/";
+        "/home";
     }
-
-    setLoading(false);
   }
 
   return (

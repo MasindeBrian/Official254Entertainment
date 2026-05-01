@@ -1,5 +1,6 @@
 import "./globals.css";
 import { CartProvider } from "./components/CartContext";
+import AuthGate from "./authgate";
 
 export const metadata = {
   title: "254Entertainment",
@@ -15,7 +16,9 @@ export default function RootLayout({
     <html lang="en">
       <body>
         <CartProvider>
-          {children}
+          <AuthGate>
+            {children}
+          </AuthGate>
 
           {/* Global Mobile Bottom Nav */}
           <nav className="md:hidden fixed bottom-4 left-4 right-4 bg-white border shadow-lg rounded-2xl grid grid-cols-4 py-3 text-center text-xs z-50">
