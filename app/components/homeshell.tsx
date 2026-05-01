@@ -37,13 +37,16 @@ export default function HomeShell({
       {/* Header */}
       <header className="sticky top-0 z-50 bg-white/90 backdrop-blur border-b">
         <div className="max-w-7xl mx-auto px-4 md:px-6 py-4 flex items-center justify-between">
-          <h1 className="text-lg sm:text-2xl font-black">
+          <a
+            href="/"
+            className="text-lg sm:text-2xl font-black"
+          >
             254Entertainment
-          </h1>
+          </a>
 
           {/* Desktop Nav */}
           <nav className="hidden md:flex gap-8 text-sm font-medium items-center">
-            <a href="#top">Home</a>
+            <a href="/">Home</a>
 
             <div className="relative">
               <button
@@ -76,13 +79,15 @@ export default function HomeShell({
               )}
             </div>
 
-            <a href="#shop">Shop</a>
+            <a href="/shop">
+              Shop
+            </a>
 
             <a href="/cart">
               Cart ({cartCount})
             </a>
 
-            <a href="#contact">
+            <a href="/contact">
               Contact
             </a>
 
@@ -91,7 +96,7 @@ export default function HomeShell({
             </a>
           </nav>
 
-          {/* Mobile Actions */}
+          {/* Mobile */}
           <div className="md:hidden flex items-center gap-3">
             <a
               href="/cart"
@@ -112,10 +117,10 @@ export default function HomeShell({
         </div>
       </header>
 
-      {/* Sidebar Overlay */}
+      {/* Sidebar */}
       {sidebar && (
         <div className="fixed inset-0 z-50 bg-black/40">
-          <div className="absolute top-0 right-0 h-full w-72 bg-white shadow-2xl p-6">
+          <div className="absolute top-0 right-0 h-full w-72 bg-white p-6 shadow-2xl">
             <div className="flex justify-between items-center mb-8">
               <h2 className="text-2xl font-bold">
                 Menu
@@ -133,7 +138,7 @@ export default function HomeShell({
 
             <div className="space-y-4 text-lg">
               <a
-                href="#top"
+                href="/"
                 onClick={() =>
                   setSidebar(false)
                 }
@@ -143,7 +148,7 @@ export default function HomeShell({
               </a>
 
               <a
-                href="#shop"
+                href="/shop"
                 onClick={() =>
                   setSidebar(false)
                 }
@@ -160,6 +165,16 @@ export default function HomeShell({
                 className="block"
               >
                 Cart ({cartCount})
+              </a>
+
+              <a
+                href="/contact"
+                onClick={() =>
+                  setSidebar(false)
+                }
+                className="block"
+              >
+                Contact
               </a>
 
               <a
@@ -210,10 +225,7 @@ export default function HomeShell({
       )}
 
       {/* Hero */}
-      <section
-        id="top"
-        className="max-w-7xl mx-auto px-4 md:px-10 py-10 md:py-16 grid md:grid-cols-2 gap-10 items-center"
-      >
+      <section className="max-w-7xl mx-auto px-4 md:px-10 py-10 md:py-16 grid md:grid-cols-2 gap-10 items-center">
         <div className="text-center md:text-left order-2 md:order-1">
           <p className="tracking-[0.35em] text-xs sm:text-sm text-gray-500 mb-4">
             BORN IN 254
@@ -229,7 +241,7 @@ export default function HomeShell({
 
           <div className="mt-6 flex flex-col sm:flex-row gap-3 justify-center md:justify-start">
             <a
-              href="#shop"
+              href="/shop"
               className="px-6 py-3 rounded-full bg-black text-white"
             >
               Shop Now
@@ -253,21 +265,16 @@ export default function HomeShell({
         </div>
       </section>
 
-      {/* Store */}
-      <section id="shop">
-        <StoreFront
-          products={products}
-          selectedCategory={
-            selectedCategory
-          }
-        />
-      </section>
+      {/* Products */}
+      <StoreFront
+        products={products}
+        selectedCategory={
+          selectedCategory
+        }
+      />
 
       {/* Footer */}
-      <footer
-        id="contact"
-        className="bg-black text-white py-10 px-4 md:px-6"
-      >
+      <footer className="bg-black text-white py-10 px-4 md:px-6">
         <div className="max-w-7xl mx-auto flex flex-col md:flex-row justify-between gap-8">
           <div className="text-center md:text-left">
             <h4 className="text-2xl font-bold">
