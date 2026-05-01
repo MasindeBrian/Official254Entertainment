@@ -11,23 +11,38 @@ export default function RootLayout({
 }: {
   children: React.ReactNode;
 }) {
-  const whatsappLink =
-    "https://wa.me/254757900428?text=Hello%20I%20need%20help%20with%20an%20order";
-
   return (
     <html lang="en">
       <body>
         <CartProvider>
           {children}
 
-          {/* Floating WhatsApp */}
-          <a
-            href={whatsappLink}
-            target="_blank"
-            className="fixed bottom-6 right-6 z-50 bg-green-500 text-white px-5 py-4 rounded-full shadow-xl font-semibold hover:scale-105 transition"
-          >
-            WhatsApp
-          </a>
+          {/* Global Mobile Bottom Nav */}
+          <nav className="md:hidden fixed bottom-4 left-4 right-4 bg-white border shadow-lg rounded-2xl grid grid-cols-4 py-3 text-center text-xs z-50">
+            <a href="/">
+              🏠
+              <br />
+              Home
+            </a>
+
+            <a href="/shop">
+              🛍️
+              <br />
+              Shop
+            </a>
+
+            <a href="/cart">
+              🛒
+              <br />
+              Cart
+            </a>
+
+            <a href="/login">
+              👤
+              <br />
+              Login
+            </a>
+          </nav>
         </CartProvider>
       </body>
     </html>
