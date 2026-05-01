@@ -15,6 +15,9 @@ export default function HomeShell({
   const [open, setOpen] =
     useState(false);
 
+  const [sidebar, setSidebar] =
+    useState(false);
+
   const { cart } = useCart();
 
   const cartCount = cart.reduce(
@@ -26,14 +29,15 @@ export default function HomeShell({
   function chooseCategory(cat: string) {
     setSelectedCategory(cat);
     setOpen(false);
+    setSidebar(false);
   }
 
   return (
-    <main className="min-h-screen bg-[#f5f5f5] text-black">
+    <main className="min-h-screen bg-[#f5f5f5] text-black overflow-x-hidden">
       {/* Header */}
       <header className="sticky top-0 z-50 bg-white/90 backdrop-blur border-b">
-        <div className="max-w-7xl mx-auto px-4 md:px-6 py-4 flex items-center justify-between gap-3">
-          <h1 className="text-lg sm:text-2xl font-black leading-tight">
+        <div className="max-w-7xl mx-auto px-4 md:px-6 py-4 flex items-center justify-between">
+          <h1 className="text-lg sm:text-2xl font-black">
             254Entertainment
           </h1>
 
@@ -46,7 +50,6 @@ export default function HomeShell({
                 onClick={() =>
                   setOpen(!open)
                 }
-                className="cursor-pointer"
               >
                 Collections
               </button>
@@ -82,34 +85,129 @@ export default function HomeShell({
             <a href="#contact">
               Contact
             </a>
-          </nav>
 
-          {/* Desktop Auth */}
-          <div className="hidden md:flex gap-3">
-            <a
-              href="/login"
-              className="px-4 py-2 rounded-full border"
-            >
+            <a href="/login">
               Login
             </a>
+          </nav>
 
+          {/* Mobile Actions */}
+          <div className="md:hidden flex items-center gap-3">
             <a
-              href="/signup"
-              className="px-4 py-2 rounded-full bg-black text-white"
+              href="/cart"
+              className="border px-3 py-2 rounded-full text-sm"
             >
-              Sign Up
+              Cart ({cartCount})
             </a>
-          </div>
 
-          {/* Mobile Cart */}
-          <a
-            href="/cart"
-            className="md:hidden text-sm border px-4 py-2 rounded-full"
-          >
-            Cart ({cartCount})
-          </a>
+            <button
+              onClick={() =>
+                setSidebar(true)
+              }
+              className="text-2xl"
+            >
+              ☰
+            </button>
+          </div>
         </div>
       </header>
+
+      {/* Sidebar Overlay */}
+      {sidebar && (
+        <div className="fixed inset-0 z-50 bg-black/40">
+          <div className="absolute top-0 right-0 h-full w-72 bg-white shadow-2xl p-6">
+            <div className="flex justify-between items-center mb-8">
+              <h2 className="text-2xl font-bold">
+                Menu
+              </h2>
+
+              <button
+                onClick={() =>
+                  setSidebar(false)
+                }
+                className="text-2xl"
+              >
+                ×
+              </button>
+            </div>
+
+            <div className="space-y-4 text-lg">
+              <a
+                href="#top"
+                onClick={() =>
+                  setSidebar(false)
+                }
+                className="block"
+              >
+                Home
+              </a>
+
+              <a
+                href="#shop"
+                onClick={() =>
+                  setSidebar(false)
+                }
+                className="block"
+              >
+                Shop
+              </a>
+
+              <a
+                href="/cart"
+                onClick={() =>
+                  setSidebar(false)
+                }
+                className="block"
+              >
+                Cart ({cartCount})
+              </a>
+
+              <a
+                href="/login"
+                onClick={() =>
+                  setSidebar(false)
+                }
+                className="block"
+              >
+                Login
+              </a>
+
+              <a
+                href="/signup"
+                onClick={() =>
+                  setSidebar(false)
+                }
+                className="block"
+              >
+                Sign Up
+              </a>
+
+              <div className="pt-4 border-t">
+                <p className="text-sm text-gray-400 mb-3">
+                  Collections
+                </p>
+
+                {[
+                  "All",
+                  "Men",
+                  "Women",
+                  "Unisex",
+                ].map((cat) => (
+                  <button
+                    key={cat}
+                    onClick={() =>
+                      chooseCategory(cat)
+                    }
+                    className="block w-full text-left py-2"
+                  >
+                    {cat}
+                  </button>
+                ))}
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
 
       {/* Hero */}
       <section
@@ -168,7 +266,7 @@ export default function HomeShell({
       {/* Footer */}
       <footer
         id="contact"
-        className="bg-black text-white py-10 px-4 md:px-6 pb-24 md:pb-10"
+        className="bg-black text-white py-10 px-4 md:px-6"
       >
         <div className="max-w-7xl mx-auto flex flex-col md:flex-row justify-between gap-8">
           <div className="text-center md:text-left">
@@ -188,18 +286,6 @@ export default function HomeShell({
           </div>
         </div>
       </footer>
-
-      {/* Mobile Bottom Nav */}
-      <div className="md:hidden fixed bottom-0 left-0 right-0 bg-white border-t grid grid-cols-4 text-center text-xs py-3 z-50">
-        <a href="#top">Home</a>
-        <a href="#shop">Shop</a>
-        <a href="/cart">
-          Cart ({cartCount})
-        </a>
-        <a href="#contact">
-          Contact
-        </a>
-      </div>
     </main>
   );
 }
