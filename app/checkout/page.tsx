@@ -54,7 +54,7 @@ export default function CheckoutPage() {
       `Items:\n${items}\n\n` +
       `Total: KSh ${total}`;
 
-    return `https://wa.me/254757900428?text=${encodeURIComponent(
+    return `https://wa.me/254725376830?text=${encodeURIComponent(
       msg
     )}`;
   }
@@ -109,7 +109,7 @@ export default function CheckoutPage() {
     );
 
     window.location.href =
-      "/home";
+      "/shop";
   }
 
   return (
