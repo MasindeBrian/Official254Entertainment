@@ -109,7 +109,7 @@ export default function CheckoutPage() {
     );
 
     window.location.href =
-      "/";
+      "/home";
   }
 
   return (
