@@ -37,6 +37,18 @@ export default function StoreFront({
   }, [products, search, category]);
 
   function handleAdd(item: any) {
+    if (item.stock_quantity === 0) {
+      setAlert(
+        `${item.name} is out of stock`
+      );
+
+      setTimeout(() => {
+        setAlert("");
+      }, 1800);
+
+      return;
+    }
+
     addToCart(item);
 
     setAlert(`${item.name} added to cart`);
@@ -54,10 +66,10 @@ export default function StoreFront({
   ];
 
   return (
-    <section className="bg-[#f8f8f8]">
+    <section>
       {alert && (
         <div className="fixed top-24 left-1/2 -translate-x-1/2 z-50">
-          <div className="bg-black text-white px-6 py-3 rounded-full shadow-xl text-sm font-semibold">
+          <div className="premium-btn px-6 py-3 rounded-full text-sm font-semibold">
             {alert}
           </div>
         </div>
@@ -67,20 +79,20 @@ export default function StoreFront({
       <div className="max-w-7xl mx-auto px-4 md:px-8 pt-8 pb-8">
         <div className="flex flex-col md:flex-row md:items-end md:justify-between gap-5">
           <div>
-            <p className="tracking-[0.35em] text-xs text-gray-400 mb-3">
+            <p className="eyebrow mb-3">
               COLLECTIONS
             </p>
 
-            <h2 className="text-4xl md:text-6xl font-black">
+            <h2 className="text-4xl md:text-6xl font-black tracking-tight">
               Shop All
             </h2>
 
-            <p className="text-gray-500 mt-3">
+            <p className="premium-subtle mt-3">
               Curated premium pieces for culture and movement.
             </p>
           </div>
 
-          <p className="text-sm text-gray-400">
+          <p className="text-sm premium-subtle">
             {filtered.length} products
           </p>
         </div>
@@ -88,7 +100,7 @@ export default function StoreFront({
 
       {/* Controls */}
       <div className="max-w-7xl mx-auto px-4 md:px-8 pb-10">
-        <div className="bg-white rounded-[2rem] p-5 shadow-sm">
+        <div className="premium-card rounded-[2rem] p-5">
           <div className="grid md:grid-cols-2 gap-4">
             <input
               value={search}
@@ -96,7 +108,7 @@ export default function StoreFront({
                 setSearch(e.target.value)
               }
               placeholder="Search products..."
-              className="w-full rounded-full px-6 py-4 outline-none bg-[#f4f4f4] focus:ring-2 focus:ring-black transition"
+              className="premium-input w-full rounded-full px-6 py-4 outline-none transition"
             />
 
             <div className="flex flex-wrap gap-2 md:justify-end">
@@ -108,8 +120,8 @@ export default function StoreFront({
                   }
                   className={`px-5 py-3 rounded-full text-sm font-semibold transition-all duration-300 ${
                     category === cat
-                      ? "bg-black text-white shadow-md"
-                      : "bg-[#f4f4f4] hover:bg-black hover:text-white"
+                      ? "premium-btn shadow-md"
+                      : "secondary-btn"
                   }`}
                 >
                   {cat}
@@ -123,26 +135,35 @@ export default function StoreFront({
       {/* Products */}
       <div className="max-w-7xl mx-auto px-4 md:px-8 pb-24">
         {filtered.length === 0 ? (
-          <div className="bg-white rounded-[2rem] p-12 text-center shadow-sm">
+          <div className="premium-card rounded-[2rem] p-12 text-center">
             <h3 className="text-2xl font-bold">
               No products found
             </h3>
 
-            <p className="text-gray-500 mt-2">
+            <p className="premium-subtle mt-2">
               Try another search.
             </p>
           </div>
         ) : (
           <div className="grid sm:grid-cols-2 xl:grid-cols-4 gap-6">
-            {filtered.map((item, i) => (
+            {filtered.map((item, i) => {
+              const outOfStock =
+                item.stock_quantity ===
+                  0 ||
+                item.stock_quantity ==
+                  null;
+
+              return (
               <div
                 key={item.id}
-                className="bg-white rounded-[2rem] overflow-hidden shadow-sm hover:shadow-2xl hover:-translate-y-2 transition-all duration-300 group"
+                className="premium-card rounded-[2rem] overflow-hidden transition-all duration-300 group"
               >
                 {/* Image */}
-                <div className="relative overflow-hidden bg-[#f3f3f3]">
-                  <span className="absolute top-4 left-4 z-10 bg-black text-white text-[10px] px-3 py-1 rounded-full tracking-wide">
-                    {i % 3 === 0
+                <div className="product-stage relative overflow-hidden">
+                  <span className="absolute top-4 left-4 z-10 bg-[#14110f] text-white text-[10px] px-3 py-1 rounded-full tracking-wide">
+                    {outOfStock
+                      ? "OUT"
+                      : i % 3 === 0
                       ? "NEW"
                       : i % 3 === 1
                       ? "HOT"
@@ -166,8 +187,16 @@ export default function StoreFront({
                     {item.name}
                   </h4>
 
-                  <p className="text-xs text-gray-400 uppercase tracking-[0.25em] mb-4">
+                  <p className="text-xs premium-subtle uppercase tracking-[0.22em] mb-4">
                     {item.category}
+                  </p>
+
+                  <p className="mb-4 text-sm font-semibold">
+                    {outOfStock
+                      ? "Out of stock"
+                      : item.stock_quantity
+                      ? `${item.stock_quantity} in stock`
+                      : "Out of stock"}
                   </p>
 
                   <div className="flex justify-between items-center mb-5">
@@ -175,7 +204,7 @@ export default function StoreFront({
                       {item.price}
                     </span>
 
-                    <span className="text-xs text-gray-400">
+                    <span className="text-xs premium-subtle">
                       Premium
                     </span>
                   </div>
@@ -184,13 +213,17 @@ export default function StoreFront({
                     onClick={() =>
                       handleAdd(item)
                     }
-                    className="w-full bg-black text-white py-3 rounded-full font-semibold hover:scale-[1.02] hover:opacity-95 transition-all"
+                    disabled={outOfStock}
+                    className="premium-btn w-full py-3 rounded-full font-semibold transition-all disabled:bg-gray-300 disabled:text-gray-500 disabled:shadow-none"
                   >
-                    Add to Cart
+                    {outOfStock
+                      ? "Out of Stock"
+                      : "Add to Cart"}
                   </button>
                 </div>
               </div>
-            ))}
+              );
+            })}
           </div>
         )}
       </div>

@@ -13,6 +13,9 @@ export default function AdminPage() {
   const [price, setPrice] =
     useState("");
 
+  const [stockQuantity, setStockQuantity] =
+    useState("");
+
   const [category, setCategory] =
     useState("Men");
 
@@ -35,6 +38,9 @@ export default function AdminPage() {
     useState("");
 
   const [editPrice, setEditPrice] =
+    useState("");
+
+  const [editStockQuantity, setEditStockQuantity] =
     useState("");
 
   const [editCategory, setEditCategory] =
@@ -128,18 +134,51 @@ export default function AdminPage() {
         imageUrl = uploaded;
     }
 
-    const { error } =
+    const payload = {
+      name,
+      price,
+      category,
+      image_url:
+        imageUrl,
+      stock_quantity:
+        stockQuantity === ""
+          ? null
+          : Number(stockQuantity),
+    };
+
+    let { error } =
       await supabase
         .from("products")
-        .insert([
-          {
-            name,
-            price,
-            category,
-            image_url:
-              imageUrl,
-          },
-        ]);
+        .insert([payload]);
+
+    let stockColumnMissing =
+      false;
+
+    if (
+      error &&
+      error.message
+        .toLowerCase()
+        .includes(
+          "stock_quantity"
+        )
+      ) {
+      stockColumnMissing =
+        true;
+
+      const {
+        stock_quantity,
+        ...fallbackPayload
+      } = payload;
+
+      const fallback =
+        await supabase
+          .from("products")
+          .insert([
+            fallbackPayload,
+          ]);
+
+      error = fallback.error;
+    }
 
     if (error) {
       setMessage(
@@ -147,10 +186,13 @@ export default function AdminPage() {
       );
     } else {
       setMessage(
-        "Product added."
+        stockColumnMissing
+          ? "Product added, but stock quantity did not save because the products table needs a stock_quantity column."
+          : "Product added."
       );
       setName("");
       setPrice("");
+      setStockQuantity("");
       setCategory("Men");
       setImageFile(null);
       loadProducts();
@@ -176,6 +218,10 @@ export default function AdminPage() {
     setEditingId(item.id);
     setEditName(item.name);
     setEditPrice(item.price);
+    setEditStockQuantity(
+      item.stock_quantity ??
+        ""
+    );
     setEditCategory(
       item.category
     );
@@ -185,6 +231,8 @@ export default function AdminPage() {
   async function saveEdit(
     item: any
   ) {
+    setMessage("");
+
     let imageUrl =
       item.image_url;
 
@@ -198,41 +246,94 @@ export default function AdminPage() {
         imageUrl = uploaded;
     }
 
-    await supabase
+    const payload = {
+      name: editName,
+      price: editPrice,
+      category:
+        editCategory,
+      image_url:
+        imageUrl,
+      stock_quantity:
+        editStockQuantity ===
+        ""
+          ? null
+          : Number(
+              editStockQuantity
+            ),
+    };
+
+    let { error } =
+      await supabase
       .from("products")
-      .update({
-        name: editName,
-        price: editPrice,
-        category:
-          editCategory,
-        image_url:
-          imageUrl,
-      })
+      .update(payload)
       .eq("id", item.id);
 
+    if (
+      error &&
+      error.message
+        .toLowerCase()
+        .includes(
+          "stock_quantity"
+        )
+    ) {
+      const {
+        stock_quantity,
+        ...fallbackPayload
+      } = payload;
+
+      const fallback =
+        await supabase
+        .from("products")
+        .update(
+          fallbackPayload
+        )
+        .eq("id", item.id);
+
+      error = fallback.error;
+
+      if (!error) {
+        setMessage(
+          "Product saved, but stock quantity did not save because the products table needs a stock_quantity column."
+        );
+        setEditingId(null);
+        loadProducts();
+        return;
+      }
+    }
+
+    if (error) {
+      setMessage(
+        error.message
+      );
+      return;
+    }
+
+    setMessage(
+      "Product saved."
+    );
     setEditingId(null);
     loadProducts();
   }
 
   if (!authorized) {
     return (
-      <main className="min-h-screen bg-[#f8f8f8] flex items-center justify-center text-2xl font-bold">
+      <main className="premium-page min-h-screen flex items-center justify-center text-2xl font-bold">
         Loading...
       </main>
     );
   }
 
   return (
-    <main className="min-h-screen bg-[#f8f8f8] text-black p-6 md:p-10">
+    <main className="premium-page min-h-screen text-black p-6 md:p-10">
       <div className="max-w-7xl mx-auto">
         {/* Header */}
         <div className="flex flex-col md:flex-row md:items-end md:justify-between gap-4 mb-10">
           <div>
-            <p className="tracking-[0.35em] text-xs text-gray-400 mb-3">
+            <p className="eyebrow mb-3">
               PRODUCTS
             </p>
 
-            <h1 className="text-4xl md:text-6xl font-black">
+            <h1 className="text-4xl md:text-6xl font-black tracking-tight">
               Inventory
             </h1>
           </div>
@@ -240,14 +341,14 @@ export default function AdminPage() {
           <div className="flex gap-3 flex-wrap">
             <a
               href="/dashboard"
-              className="border px-5 py-3 rounded-full bg-white font-semibold"
+              className="secondary-btn px-5 py-3 rounded-full font-semibold"
             >
               Hub
             </a>
 
             <a
               href="/admin-orders"
-              className="border px-5 py-3 rounded-full bg-white font-semibold"
+              className="secondary-btn px-5 py-3 rounded-full font-semibold"
             >
               Orders
             </a>
@@ -255,7 +356,7 @@ export default function AdminPage() {
         </div>
 
         {/* Add Product */}
-        <div className="bg-white border rounded-3xl p-6 md:p-8 mb-10">
+        <div className="premium-card rounded-3xl p-6 md:p-8 mb-10">
           <h2 className="text-2xl font-black mb-6">
             Add Product
           </h2>
@@ -269,7 +370,7 @@ export default function AdminPage() {
                   e.target.value
                 )
               }
-              className="border rounded-full px-5 py-4"
+              className="premium-input rounded-full px-5 py-4"
             />
 
             <input
@@ -280,7 +381,20 @@ export default function AdminPage() {
                   e.target.value
                 )
               }
-              className="border rounded-full px-5 py-4"
+              className="premium-input rounded-full px-5 py-4"
+            />
+
+            <input
+              type="number"
+              min="0"
+              placeholder="Stock Quantity"
+              value={stockQuantity}
+              onChange={(e) =>
+                setStockQuantity(
+                  e.target.value
+                )
+              }
+              className="premium-input rounded-full px-5 py-4"
             />
 
             <select
@@ -290,7 +404,7 @@ export default function AdminPage() {
                   e.target.value
                 )
               }
-              className="border rounded-full px-5 py-4"
+              className="premium-input rounded-full px-5 py-4"
             >
               <option>Men</option>
               <option>Women</option>
@@ -307,14 +421,14 @@ export default function AdminPage() {
                     null
                 )
               }
-              className="border rounded-full px-5 py-4"
+              className="premium-input rounded-full px-5 py-4"
             />
           </div>
 
           <button
             onClick={addProduct}
             disabled={loading}
-            className="mt-5 bg-black text-white px-6 py-4 rounded-full font-semibold"
+            className="premium-btn mt-5 px-6 py-4 rounded-full font-semibold"
           >
             {loading
               ? "Uploading..."
@@ -322,7 +436,7 @@ export default function AdminPage() {
           </button>
 
           {message && (
-            <p className="text-sm mt-4 text-gray-500">
+            <p className="text-sm mt-4 premium-subtle">
               {message}
             </p>
           )}
@@ -334,7 +448,7 @@ export default function AdminPage() {
             (item) => (
               <div
                 key={item.id}
-                className="bg-white border rounded-3xl p-5"
+                className="premium-card rounded-3xl p-5"
               >
                 {item.image_url ? (
                   <img
@@ -347,7 +461,7 @@ export default function AdminPage() {
                     className="w-full h-52 object-cover rounded-2xl mb-4"
                   />
                 ) : (
-                  <div className="w-full h-52 rounded-2xl bg-[#f3f3f3] mb-4" />
+                  <div className="product-stage w-full h-52 rounded-2xl mb-4" />
                 )}
 
                 {editingId ===
@@ -365,7 +479,7 @@ export default function AdminPage() {
                             .value
                         )
                       }
-                      className="w-full border rounded-full px-4 py-3 mb-3"
+                      className="premium-input w-full rounded-full px-4 py-3 mb-3"
                     />
 
                     <input
@@ -380,7 +494,24 @@ export default function AdminPage() {
                             .value
                         )
                       }
-                      className="w-full border rounded-full px-4 py-3 mb-3"
+                      className="premium-input w-full rounded-full px-4 py-3 mb-3"
+                    />
+
+                    <input
+                      type="number"
+                      min="0"
+                      value={
+                        editStockQuantity
+                      }
+                      onChange={(
+                        e
+                      ) =>
+                        setEditStockQuantity(
+                          e.target
+                            .value
+                        )
+                      }
+                      className="premium-input w-full rounded-full px-4 py-3 mb-3"
                     />
 
                     <select
@@ -395,7 +526,7 @@ export default function AdminPage() {
                             .value
                         )
                       }
-                      className="w-full border rounded-full px-4 py-3 mb-3"
+                      className="premium-input w-full rounded-full px-4 py-3 mb-3"
                     >
                       <option>
                         Men
@@ -430,7 +561,7 @@ export default function AdminPage() {
                             item
                           )
                         }
-                        className="bg-black text-white px-5 py-3 rounded-full"
+                        className="premium-btn px-5 py-3 rounded-full"
                       >
                         Save
                       </button>
@@ -441,7 +572,7 @@ export default function AdminPage() {
                             null
                           )
                         }
-                        className="border px-5 py-3 rounded-full"
+                        className="secondary-btn px-5 py-3 rounded-full"
                       >
                         Cancel
                       </button>
@@ -461,7 +592,16 @@ export default function AdminPage() {
                       }
                     </p>
 
-                    <p className="text-sm text-gray-400 uppercase tracking-[0.25em] mb-5 mt-1">
+                    <p className="mt-2 text-sm font-semibold">
+                      {item.stock_quantity ===
+                      0
+                        ? "Out of stock"
+                        : item.stock_quantity
+                        ? `${item.stock_quantity} in stock`
+                        : "Stock not set"}
+                    </p>
+
+                    <p className="text-sm premium-subtle uppercase tracking-[0.22em] mb-5 mt-1">
                       {
                         item.category
                       }
@@ -474,7 +614,7 @@ export default function AdminPage() {
                             item
                           )
                         }
-                        className="bg-black text-white px-5 py-3 rounded-full"
+                        className="premium-btn px-5 py-3 rounded-full"
                       >
                         Edit
                       </button>
@@ -485,7 +625,7 @@ export default function AdminPage() {
                             item.id
                           )
                         }
-                        className="border px-5 py-3 rounded-full"
+                        className="secondary-btn px-5 py-3 rounded-full"
                       >
                         Delete
                       </button>

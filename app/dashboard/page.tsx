@@ -49,7 +49,7 @@ export default function DashboardPage() {
 
   if (loading) {
     return (
-      <main className="min-h-screen bg-[#f8f8f8] flex items-center justify-center text-2xl font-bold">
+      <main className="premium-page min-h-screen flex items-center justify-center text-2xl font-bold">
         Loading...
       </main>
     );
@@ -71,26 +71,26 @@ export default function DashboardPage() {
   ];
 
   return (
-    <main className="min-h-screen bg-[#f8f8f8] text-black p-6 md:p-10">
+    <main className="premium-page min-h-screen text-black p-6 md:p-10">
       <div className="max-w-6xl mx-auto">
-        <p className="tracking-[0.35em] text-xs text-gray-400 mb-3">
+        <p className="eyebrow mb-3">
           ADMIN PANEL
         </p>
 
         <div className="flex flex-col md:flex-row md:items-end md:justify-between gap-4 mb-10">
           <div>
-            <h1 className="text-4xl md:text-6xl font-black">
+            <h1 className="text-4xl md:text-6xl font-black tracking-tight">
               Control Hub
             </h1>
 
-            <p className="text-gray-500 mt-3">
+            <p className="premium-subtle mt-3">
               Manage your store operations.
             </p>
           </div>
 
           <button
             onClick={logout}
-            className="border px-6 py-3 rounded-full font-semibold bg-white"
+            className="secondary-btn px-6 py-3 rounded-full font-semibold"
           >
             Logout
           </button>
@@ -101,7 +101,7 @@ export default function DashboardPage() {
             <a
               key={card.title}
               href={card.link}
-              className="bg-white border rounded-3xl p-8 hover:shadow-xl transition"
+              className="premium-card rounded-3xl p-8 transition"
             >
               <div className="text-4xl mb-4">
                 {card.icon}
@@ -111,7 +111,7 @@ export default function DashboardPage() {
                 {card.title}
               </h2>
 
-              <p className="text-gray-500">
+              <p className="premium-subtle">
                 {card.desc}
               </p>
             </a>

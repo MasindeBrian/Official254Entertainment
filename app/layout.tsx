@@ -4,6 +4,7 @@ import "./globals.css";
 import { usePathname } from "next/navigation";
 import { CartProvider } from "./components/CartContext";
 import AuthGate from "./authgate";
+import { supabase } from "@/lib/supabase";
 
 export default function RootLayout({
   children,
@@ -13,10 +14,18 @@ export default function RootLayout({
   const pathname =
     usePathname();
 
-  const hideNav =
-    pathname === "/" ||
-    pathname === "/login" ||
-    pathname === "/signup";
+ const hideNav =
+  pathname === "/" ||
+  pathname === "/login" ||
+ pathname === "/signup" ||
+ pathname === "/admin" ||
+ pathname === "/dashboard" ||
+ pathname === "/admin-orders";
+
+  async function logout() {
+    await supabase.auth.signOut();
+    window.location.href = "/login";
+  }
 
   return (
     <html lang="en">
@@ -27,7 +36,7 @@ export default function RootLayout({
           </AuthGate>
 
           {!hideNav && (
-            <nav className="md:hidden fixed bottom-4 left-4 right-4 bg-white border shadow-lg rounded-2xl grid grid-cols-4 py-3 text-center text-xs z-50">
+            <nav className="bottom-nav md:hidden fixed bottom-4 left-4 right-4 rounded-2xl grid grid-cols-4 py-3 text-center text-xs z-50">
               <a href="/home">
                 🏠
                 <br />
@@ -40,17 +49,27 @@ export default function RootLayout({
                 Shop
               </a>
 
+              {pathname === "/home" ? (
+                <a href="/contact">
+                  Contact
+                </a>
+              ) : (
               <a href="/cart">
                 🛒
                 <br />
                 Cart
               </a>
+              )}
 
-              <a href="/login">
+              <button
+                type="button"
+                onClick={logout}
+                className="text-center"
+              >
                 👤
                 <br />
-                Login
-              </a>
+                Logout
+              </button>
             </nav>
           )}
         </CartProvider>

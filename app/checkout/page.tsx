@@ -113,15 +113,15 @@ export default function CheckoutPage() {
   }
 
   return (
-    <main className="min-h-screen bg-[#f8f8f8] text-black p-6 md:p-10">
+    <main className="premium-page min-h-screen text-black p-6 md:p-10">
       <div className="max-w-6xl mx-auto grid md:grid-cols-2 gap-8">
         {/* Form */}
-        <div className="bg-white rounded-3xl border p-8 shadow-sm">
-          <p className="tracking-[0.35em] text-xs text-gray-400 mb-3">
+        <div className="premium-card rounded-3xl p-8">
+          <p className="eyebrow mb-3">
             CHECKOUT
           </p>
 
-          <h1 className="text-4xl md:text-6xl font-black mb-8">
+          <h1 className="text-4xl md:text-6xl font-black tracking-tight mb-8">
             Complete Order
           </h1>
 
@@ -134,7 +134,7 @@ export default function CheckoutPage() {
                   e.target.value
                 )
               }
-              className="w-full border rounded-full px-6 py-4"
+              className="premium-input w-full rounded-full px-6 py-4"
             />
 
             <input
@@ -145,7 +145,7 @@ export default function CheckoutPage() {
                   e.target.value
                 )
               }
-              className="w-full border rounded-full px-6 py-4"
+              className="premium-input w-full rounded-full px-6 py-4"
             />
 
             <input
@@ -156,7 +156,7 @@ export default function CheckoutPage() {
                   e.target.value
                 )
               }
-              className="w-full border rounded-full px-6 py-4"
+              className="premium-input w-full rounded-full px-6 py-4"
             />
 
             <button
@@ -165,7 +165,7 @@ export default function CheckoutPage() {
                 loading ||
                 cart.length === 0
               }
-              className="w-full bg-black text-white py-4 rounded-full font-semibold text-lg disabled:opacity-50"
+              className="premium-btn w-full py-4 rounded-full font-semibold text-lg disabled:opacity-50"
             >
               {loading
                 ? "Processing..."
@@ -183,14 +183,14 @@ export default function CheckoutPage() {
         </div>
 
         {/* Summary */}
-        <div className="bg-white rounded-3xl border p-8 shadow-sm">
+        <div className="premium-card rounded-3xl p-8">
           <h2 className="text-3xl font-black mb-6">
             Order Summary
           </h2>
 
           <div className="space-y-4 mb-8">
             {cart.length === 0 ? (
-              <p className="text-gray-500">
+              <p className="premium-subtle">
                 No items in cart.
               </p>
             ) : (
@@ -198,7 +198,7 @@ export default function CheckoutPage() {
                 (item: any) => (
                   <div
                     key={item.id}
-                    className="flex justify-between border-b pb-3"
+                    className="flex justify-between border-b border-black/10 pb-3"
                   >
                     <div>
                       <p className="font-semibold">
@@ -207,7 +207,7 @@ export default function CheckoutPage() {
                         }
                       </p>
 
-                      <p className="text-sm text-gray-400">
+                      <p className="text-sm premium-subtle">
                         Qty:{" "}
                         {
                           item.quantity
@@ -226,7 +226,7 @@ export default function CheckoutPage() {
             )}
           </div>
 
-          <div className="border-t pt-6 flex justify-between text-2xl font-black">
+          <div className="border-t border-black/10 pt-6 flex justify-between text-2xl font-black">
             <span>Total</span>
 
             <span>
@@ -235,7 +235,7 @@ export default function CheckoutPage() {
             </span>
           </div>
 
-          <p className="text-sm text-gray-400 mt-5">
+          <p className="text-sm premium-subtle mt-5">
             Secure order handling.
           </p>
         </div>

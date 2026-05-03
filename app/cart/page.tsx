@@ -33,42 +33,42 @@ export default function CartPage() {
   );
 
   return (
-    <main className="min-h-screen bg-[#f8f8f8] text-black p-6 md:p-10">
+    <main className="premium-page min-h-screen text-black p-6 md:p-10">
       <div className="max-w-6xl mx-auto grid md:grid-cols-3 gap-8">
         {/* Items */}
         <div className="md:col-span-2">
           <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4 mb-8">
             <div>
-              <p className="tracking-[0.35em] text-xs text-gray-400 mb-2">
+              <p className="eyebrow mb-2">
                 CART
               </p>
 
-              <h1 className="text-4xl md:text-6xl font-black">
+              <h1 className="text-4xl md:text-6xl font-black tracking-tight">
                 Your Bag
               </h1>
             </div>
 
             <a
               href="/shop"
-              className="border px-5 py-3 rounded-full font-semibold text-center"
+              className="secondary-btn px-5 py-3 rounded-full font-semibold text-center"
             >
               Continue Shopping
             </a>
           </div>
 
           {cart.length === 0 ? (
-            <div className="bg-white rounded-3xl border p-12 text-center">
+            <div className="premium-card rounded-3xl p-12 text-center">
               <h2 className="text-2xl font-bold mb-3">
                 Your cart is empty
               </h2>
 
-              <p className="text-gray-500 mb-6">
+              <p className="premium-subtle mb-6">
                 Add premium pieces to begin.
               </p>
 
               <a
                 href="/shop"
-                className="inline-block bg-black text-white px-6 py-3 rounded-full font-semibold"
+                className="premium-btn inline-block px-6 py-3 rounded-full font-semibold"
               >
                 Shop Now
               </a>
@@ -78,7 +78,7 @@ export default function CartPage() {
               {cart.map((item: any) => (
                 <div
                   key={item.id}
-                  className="bg-white border rounded-3xl p-5 flex flex-col md:flex-row gap-5 items-center"
+                  className="premium-card rounded-3xl p-5 flex flex-col md:flex-row gap-5 items-center"
                 >
                   {item.image_url ? (
                     <img
@@ -87,7 +87,7 @@ export default function CartPage() {
                       className="w-28 h-28 rounded-2xl object-cover"
                     />
                   ) : (
-                    <div className="w-28 h-28 rounded-2xl bg-[#f3f3f3]" />
+                    <div className="product-stage w-28 h-28 rounded-2xl" />
                   )}
 
                   <div className="flex-1 text-center md:text-left">
@@ -95,11 +95,11 @@ export default function CartPage() {
                       {item.name}
                     </h3>
 
-                    <p className="text-gray-500">
+                    <p className="premium-subtle">
                       {item.price}
                     </p>
 
-                    <p className="text-xs uppercase tracking-[0.25em] text-gray-400 mt-1">
+                    <p className="text-xs uppercase tracking-[0.22em] premium-subtle mt-1">
                       {item.category}
                     </p>
                   </div>
@@ -109,7 +109,7 @@ export default function CartPage() {
                       onClick={() =>
                         decreaseQty(item.id)
                       }
-                      className="w-10 h-10 rounded-full border text-lg"
+                      className="secondary-btn w-10 h-10 rounded-full text-lg"
                     >
                       −
                     </button>
@@ -122,7 +122,7 @@ export default function CartPage() {
                       onClick={() =>
                         increaseQty(item.id)
                       }
-                      className="w-10 h-10 rounded-full border text-lg"
+                      className="secondary-btn w-10 h-10 rounded-full text-lg"
                     >
                       +
                     </button>
@@ -132,7 +132,7 @@ export default function CartPage() {
                     onClick={() =>
                       removeFromCart(item.id)
                     }
-                    className="px-5 py-3 rounded-full border font-semibold"
+                    className="secondary-btn px-5 py-3 rounded-full font-semibold"
                   >
                     Remove
                   </button>
@@ -144,7 +144,7 @@ export default function CartPage() {
 
         {/* Summary */}
         <div>
-          <div className="bg-white border rounded-3xl p-6 sticky top-24">
+          <div className="premium-card rounded-3xl p-6 sticky top-24">
             <h2 className="text-3xl font-black mb-6">
               Summary
             </h2>
@@ -164,7 +164,7 @@ export default function CartPage() {
             {cart.length > 0 ? (
               <a
                 href="/checkout"
-                className="block w-full bg-black text-white py-4 rounded-full text-center font-semibold text-lg"
+                className="premium-btn block w-full py-4 rounded-full text-center font-semibold text-lg"
               >
                 Checkout
               </a>
@@ -177,7 +177,7 @@ export default function CartPage() {
               </button>
             )}
 
-            <p className="text-sm text-gray-400 text-center mt-4">
+            <p className="text-sm premium-subtle text-center mt-4">
               Secure checkout and WhatsApp confirmation.
             </p>
           </div>

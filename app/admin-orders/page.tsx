@@ -71,7 +71,7 @@ export default function AdminOrdersPage() {
 
   if (!authorized) {
     return (
-      <main className="min-h-screen bg-[#f8f8f8] flex items-center justify-center text-2xl font-bold">
+      <main className="premium-page min-h-screen flex items-center justify-center text-2xl font-bold">
         Loading...
       </main>
     );
@@ -93,16 +93,16 @@ export default function AdminOrdersPage() {
   }
 
   return (
-    <main className="min-h-screen bg-[#f8f8f8] text-black p-6 md:p-10">
+    <main className="premium-page min-h-screen text-black p-6 md:p-10">
       <div className="max-w-7xl mx-auto">
         {/* Header */}
         <div className="flex flex-col md:flex-row md:items-end md:justify-between gap-4 mb-10">
           <div>
-            <p className="tracking-[0.35em] text-xs text-gray-400 mb-3">
+            <p className="eyebrow mb-3">
               ORDERS
             </p>
 
-            <h1 className="text-4xl md:text-6xl font-black">
+            <h1 className="text-4xl md:text-6xl font-black tracking-tight">
               Orders Hub
             </h1>
           </div>
@@ -110,14 +110,14 @@ export default function AdminOrdersPage() {
           <div className="flex gap-3 flex-wrap">
             <a
               href="/dashboard"
-              className="border px-5 py-3 rounded-full bg-white font-semibold"
+              className="secondary-btn px-5 py-3 rounded-full font-semibold"
             >
               Hub
             </a>
 
             <a
               href="/admin"
-              className="border px-5 py-3 rounded-full bg-white font-semibold"
+              className="secondary-btn px-5 py-3 rounded-full font-semibold"
             >
               Products
             </a>
@@ -126,12 +126,12 @@ export default function AdminOrdersPage() {
 
         {/* Orders */}
         {orders.length === 0 ? (
-          <div className="bg-white border rounded-3xl p-12 text-center">
+          <div className="premium-card rounded-3xl p-12 text-center">
             <h2 className="text-2xl font-black mb-2">
               No orders yet
             </h2>
 
-            <p className="text-gray-500">
+            <p className="premium-subtle">
               Incoming customer orders will appear here.
             </p>
           </div>
@@ -141,7 +141,7 @@ export default function AdminOrdersPage() {
               (order) => (
                 <div
                   key={order.id}
-                  className="bg-white border rounded-3xl p-6"
+                  className="premium-card rounded-3xl p-6"
                 >
                   <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4 mb-5">
                     <div>
@@ -152,7 +152,7 @@ export default function AdminOrdersPage() {
                         }
                       </h2>
 
-                      <p className="text-gray-500">
+                      <p className="premium-subtle">
                         {
                           order.customer_name
                         }
@@ -171,7 +171,7 @@ export default function AdminOrdersPage() {
 
                   <div className="grid md:grid-cols-3 gap-4 mb-5 text-sm">
                     <div>
-                      <p className="text-gray-400">
+                      <p className="premium-subtle">
                         Phone
                       </p>
 
@@ -183,7 +183,7 @@ export default function AdminOrdersPage() {
                     </div>
 
                     <div>
-                      <p className="text-gray-400">
+                      <p className="premium-subtle">
                         Location
                       </p>
 
@@ -195,7 +195,7 @@ export default function AdminOrdersPage() {
                     </div>
 
                     <div>
-                      <p className="text-gray-400">
+                      <p className="premium-subtle">
                         Total
                       </p>
 
@@ -208,7 +208,7 @@ export default function AdminOrdersPage() {
                   </div>
 
                   <div className="mb-6">
-                    <p className="text-gray-400 mb-2">
+                    <p className="premium-subtle mb-2">
                       Items
                     </p>
 
@@ -220,7 +220,7 @@ export default function AdminOrdersPage() {
                         ) => (
                           <div
                             key={i}
-                            className="flex justify-between border rounded-2xl px-4 py-3"
+                            className="flex justify-between border border-black/10 rounded-2xl px-4 py-3"
                           >
                             <span>
                               {
@@ -248,7 +248,7 @@ export default function AdminOrdersPage() {
                           "pending"
                         )
                       }
-                      className="border px-5 py-3 rounded-full font-semibold"
+                      className="secondary-btn px-5 py-3 rounded-full font-semibold"
                     >
                       Pending
                     </button>
@@ -260,7 +260,7 @@ export default function AdminOrdersPage() {
                           "paid"
                         )
                       }
-                      className="bg-black text-white px-5 py-3 rounded-full font-semibold"
+                      className="premium-btn px-5 py-3 rounded-full font-semibold"
                     >
                       Paid
                     </button>
@@ -272,7 +272,7 @@ export default function AdminOrdersPage() {
                           "delivered"
                         )
                       }
-                      className="border px-5 py-3 rounded-full font-semibold"
+                      className="secondary-btn px-5 py-3 rounded-full font-semibold"
                     >
                       Delivered
                     </button>

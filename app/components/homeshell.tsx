@@ -3,6 +3,7 @@
 import { useState } from "react";
 import StoreFront from "./StoreFront";
 import { useCart } from "./CartContext";
+import { supabase } from "@/lib/supabase";
 
 export default function HomeShell({
   products,
@@ -52,6 +53,11 @@ export default function HomeShell({
     setMenuOpen(false);
   }
 
+  async function logout() {
+    await supabase.auth.signOut();
+    window.location.href = "/login";
+  }
+
   const navLinks = [
     { name: "Home", href: "/home" },
     { name: "Shop", href: "/shop" },
@@ -66,62 +72,78 @@ export default function HomeShell({
   ];
 
   return (
-    <main className="min-h-screen bg-[#f8f8f8] text-black pb-20 md:pb-0">
+    <main className="premium-page min-h-screen text-black pt-20 pb-20 md:pb-0">
       {/* Header */}
-      <header className="sticky top-0 z-50 bg-white/90 backdrop-blur border-b">
-        <div className="max-w-7xl mx-auto px-4 md:px-6 py-4 flex items-center justify-between">
+      <header className="premium-header fixed top-0 left-0 right-0 z-50">
+        <div className="max-w-7xl mx-auto px-4 md:px-6 py-4 flex items-center justify-between gap-3">
+
+          {/* Mobile Menu */}
           <button
             onClick={() =>
               setMenuOpen(true)
             }
-            className="md:hidden text-2xl"
+            className="secondary-btn md:hidden text-2xl w-10 h-10 rounded-full flex items-center justify-center"
           >
             ☰
           </button>
 
+          {/* Logo */}
           <a
             href="/home"
-            className="text-lg md:text-3xl font-black"
+            className="text-sm sm:text-lg md:text-3xl font-black whitespace-nowrap tracking-tight"
           >
             254{" "}
-            <span className="bg-black text-white px-3 py-1 rounded-lg">
+            <span className="brand-pill px-2 md:px-3 py-1">
               ENTERTAINMENT
             </span>
           </a>
 
+          {/* Desktop Nav */}
           <nav className="hidden md:flex gap-8 text-sm font-semibold">
             {navLinks.map((link) => (
               <a
                 key={link.name}
                 href={link.href}
-                className="hover:text-gray-500 transition"
+                className="premium-subtle hover:text-black transition"
               >
                 {link.name}
               </a>
             ))}
           </nav>
 
-          <button
-            onClick={() =>
-              setCartOpen(true)
-            }
-            className="relative text-2xl hover:scale-110 transition"
-          >
-            🛒
+          <div className="hidden md:flex items-center gap-3">
+            <button
+              type="button"
+              onClick={logout}
+              className="secondary-btn px-5 py-3 rounded-full text-sm font-semibold"
+            >
+              Logout
+            </button>
 
-            {cartCount > 0 && (
-              <span className="absolute -top-2 -right-2 bg-black text-white text-[10px] w-5 h-5 rounded-full flex items-center justify-center">
-                {cartCount}
+            <button
+              onClick={() =>
+                setCartOpen(true)
+              }
+              className="secondary-btn relative flex items-center justify-center w-11 h-11 rounded-full active:scale-95 transition-all shrink-0"
+            >
+              <span className="text-xl">
+                🛒
               </span>
-            )}
-          </button>
+
+              {cartCount > 0 && (
+                <span className="absolute -top-1 -right-1 bg-[#5b1f2f] text-white text-[10px] min-w-[18px] h-[18px] px-1 rounded-full flex items-center justify-center leading-none">
+                  {cartCount}
+                </span>
+              )}
+            </button>
+          </div>
         </div>
       </header>
 
       {/* Mobile Menu */}
       {menuOpen && (
-        <div className="fixed inset-0 z-50 bg-black/40">
-          <div className="bg-white w-72 h-full p-6">
+        <div className="fixed inset-0 z-50 bg-black/45 backdrop-blur-sm">
+          <div className="premium-card w-72 h-full p-6">
             <div className="flex justify-between mb-8">
               <h2 className="font-black text-xl">
                 MENU
@@ -131,6 +153,7 @@ export default function HomeShell({
                 onClick={() =>
                   setMenuOpen(false)
                 }
+                className="secondary-btn w-10 h-10 rounded-full text-xl"
               >
                 ✕
               </button>
@@ -152,7 +175,7 @@ export default function HomeShell({
             </div>
 
             <div className="mt-8 pt-6 border-t">
-              <p className="text-sm text-gray-400 mb-3">
+              <p className="text-sm premium-subtle mb-3">
                 Categories
               </p>
 
@@ -168,15 +191,24 @@ export default function HomeShell({
                 </button>
               ))}
             </div>
+
+            <button
+              type="button"
+              onClick={logout}
+              className="secondary-btn mt-8 w-full rounded-full px-5 py-3 text-left font-semibold"
+            >
+              Logout
+            </button>
           </div>
         </div>
       )}
 
       {/* Cart Drawer */}
       {cartOpen && (
-        <div className="fixed inset-0 z-50 bg-black/40">
-          <div className="absolute right-0 top-0 h-full w-full max-w-md bg-white shadow-2xl flex flex-col">
-            <div className="p-6 border-b flex justify-between items-center">
+        <div className="fixed inset-0 z-50 bg-black/45 backdrop-blur-sm">
+          <div className="absolute right-0 top-0 h-full w-full max-w-md premium-card shadow-2xl flex flex-col">
+
+            <div className="p-6 border-b border-black/10 flex justify-between items-center">
               <h2 className="text-2xl font-black">
                 Your Cart
               </h2>
@@ -185,7 +217,7 @@ export default function HomeShell({
                 onClick={() =>
                   setCartOpen(false)
                 }
-                className="text-2xl"
+                className="secondary-btn w-10 h-10 rounded-full text-xl hover:scale-105 transition"
               >
                 ✕
               </button>
@@ -200,13 +232,13 @@ export default function HomeShell({
                 cart.map((item: any) => (
                   <div
                     key={item.id}
-                    className="rounded-2xl bg-[#fafafa] p-4"
+                    className="rounded-2xl bg-white/70 border border-black/5 p-4 shadow-sm"
                   >
                     <h3 className="font-bold">
                       {item.name}
                     </h3>
 
-                    <p className="text-gray-500 text-sm">
+                    <p className="premium-subtle text-sm">
                       {item.price}
                     </p>
 
@@ -215,7 +247,7 @@ export default function HomeShell({
                         onClick={() =>
                           decreaseQty(item.id)
                         }
-                        className="w-8 h-8 bg-white rounded-full"
+                        className="secondary-btn w-8 h-8 rounded-full"
                       >
                         -
                       </button>
@@ -228,7 +260,7 @@ export default function HomeShell({
                         onClick={() =>
                           increaseQty(item.id)
                         }
-                        className="w-8 h-8 bg-white rounded-full"
+                        className="secondary-btn w-8 h-8 rounded-full"
                       >
                         +
                       </button>
@@ -247,7 +279,7 @@ export default function HomeShell({
               )}
             </div>
 
-            <div className="p-6 border-t">
+            <div className="p-6 border-t border-black/10">
               <div className="flex justify-between font-bold text-xl mb-4">
                 <span>Total</span>
                 <span>
@@ -257,7 +289,7 @@ export default function HomeShell({
 
               <a
                 href="/checkout"
-                className="block w-full bg-black text-white py-4 rounded-full text-center font-semibold hover:opacity-95 transition"
+                className="premium-btn block w-full py-4 rounded-full text-center font-semibold"
               >
                 Checkout
               </a>
@@ -267,19 +299,19 @@ export default function HomeShell({
       )}
 
       {/* Hero */}
-      <section className="max-w-7xl mx-auto px-6 py-16 md:py-24 grid md:grid-cols-2 gap-8 items-center">
-        <div className="bg-white rounded-[2rem] p-8 md:p-12 shadow-sm hover:shadow-2xl hover:-translate-y-2 hover:scale-[1.01] transition-all duration-300">
-          <p className="tracking-[0.35em] text-xs text-gray-500 mb-4">
+      <section className="max-w-7xl mx-auto px-6 py-16 md:py-24 grid md:grid-cols-[1.15fr_0.85fr] gap-8 items-center">
+        <div className="premium-card rounded-[2rem] p-8 md:p-12 transition-all duration-300">
+          <p className="eyebrow mb-4">
             BORN IN 254
           </p>
 
-          <h1 className="text-5xl md:text-8xl font-black leading-[0.92]">
+          <h1 className="text-5xl md:text-8xl font-black leading-[0.92] tracking-tight">
             Own The
             <br />
             Street.
           </h1>
 
-          <p className="mt-6 text-lg text-gray-500">
+          <p className="mt-6 text-lg premium-subtle max-w-xl">
             Premium drops inspired by culture,
             confidence and movement.
           </p>
@@ -287,7 +319,7 @@ export default function HomeShell({
           <div className="mt-8">
             <a
               href="/shop"
-              className="px-7 py-3 bg-black text-white rounded-full font-semibold hover:scale-[1.03] transition-all"
+              className="premium-btn inline-flex px-7 py-3 rounded-full font-semibold"
             >
               Shop Now
             </a>
@@ -295,7 +327,7 @@ export default function HomeShell({
         </div>
 
         <div className="flex justify-center">
-          <div className="bg-white rounded-[2rem] p-8 shadow-sm w-full max-w-sm hover:shadow-2xl hover:-translate-y-2 hover:scale-[1.02] transition-all duration-300">
+          <div className="premium-card rounded-[2rem] p-8 w-full max-w-sm transition-all duration-300">
             <img
               src="/logo.png"
               alt="254Entertainment"
@@ -305,6 +337,7 @@ export default function HomeShell({
         </div>
       </section>
 
+      {/* Products */}
       <StoreFront
         products={products}
         selectedCategory={
@@ -312,7 +345,8 @@ export default function HomeShell({
         }
       />
 
-      <footer className="bg-black text-white text-center py-10 mt-12">
+      {/* Footer */}
+      <footer className="bg-[#14110f] text-white text-center py-10 mt-12">
         © 2026 254 ENTERTAINMENT
       </footer>
     </main>

@@ -51,13 +51,13 @@ export default function SignupPage() {
   }
 
   return (
-    <main className="min-h-screen bg-[#f8f8f8] flex items-center justify-center px-6 py-10">
-      <div className="w-full max-w-md bg-white border rounded-3xl p-8 shadow-sm">
-        <p className="tracking-[0.35em] text-xs text-gray-400 mb-3">
+    <main className="premium-page min-h-screen flex items-center justify-center px-6 py-10">
+      <div className="premium-card w-full max-w-md rounded-3xl p-8">
+        <p className="eyebrow mb-3">
           JOIN THE MOVEMENT
         </p>
 
-        <h1 className="text-4xl font-black mb-8">
+        <h1 className="text-4xl font-black tracking-tight mb-8">
           Create Account
         </h1>
 
@@ -71,7 +71,7 @@ export default function SignupPage() {
                 e.target.value
               )
             }
-            className="w-full border rounded-full px-5 py-4"
+            className="premium-input w-full rounded-full px-5 py-4"
           />
 
           <input
@@ -83,13 +83,13 @@ export default function SignupPage() {
                 e.target.value
               )
             }
-            className="w-full border rounded-full px-5 py-4"
+            className="premium-input w-full rounded-full px-5 py-4"
           />
 
           <button
             onClick={handleSignup}
             disabled={loading}
-            className="w-full bg-black text-white py-4 rounded-full font-semibold"
+            className="premium-btn w-full py-4 rounded-full font-semibold"
           >
             {loading
               ? "Creating..."
@@ -104,7 +104,7 @@ export default function SignupPage() {
 
           <a
             href="/login"
-            className="block text-center text-sm text-gray-500 hover:text-black"
+            className="block text-center text-sm premium-subtle hover:text-black"
           >
             Already have an account? Login
           </a>
